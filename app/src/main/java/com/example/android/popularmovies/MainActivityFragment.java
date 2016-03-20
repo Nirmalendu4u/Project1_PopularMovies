@@ -1,7 +1,7 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -41,6 +42,16 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Check whether we're recreating a previously destroyed instance
+        if (savedInstanceState != null) {
+            movies = (Movie[]) savedInstanceState.getParcelableArray(MovieConstants.SAVED_MOVIE_DATA);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -50,14 +61,32 @@ public class MainActivityFragment extends Fragment {
 
         GridView gridView = (GridView) rootView.findViewById(R.id.movie_grid);
         gridView.setAdapter(movieAdapter);
-
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Movie movie = movieAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(MovieConstants.DETAIL_VIEW_PARCEL_KEY, movie);
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        new FetchMovieTask().execute();
+        if(movies.length == 0) {
+            new FetchMovieTask().execute();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putParcelableArray(MovieConstants.SAVED_MOVIE_DATA, movies);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     private class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
@@ -69,6 +98,7 @@ public class MainActivityFragment extends Fragment {
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             //need to change it later- the hardcoded value
             Movie[] movieArray = new Movie[20];
+            Log.e(LOG_TAG, movieArray.length + "HEEEEEELLLooooo");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
 
@@ -84,6 +114,8 @@ public class MainActivityFragment extends Fragment {
                 Log.v(LOG_TAG, jsonObj.toString());
             }
 
+            movies = movieArray;
+
             return movieArray;
         }
 
@@ -98,7 +130,7 @@ public class MainActivityFragment extends Fragment {
                         getString(R.string.sort_order_default_value));
 
 
-                final String BASE_URL = "http://api.themoviedb.org/3/movie/" + sort_order + "?api_key=";
+                final String BASE_URL = MovieConstants.MOVIE_DB_BASE_URI + sort_order + "?api_key=";
                 final String API_KEY = BuildConfig.OPEN_MOVIEDB_API_KEY;
 
 

@@ -49,8 +49,8 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.grid_item, parent, false);
         }
-        String size = "w500"; //"w92", "w154", "w185", "w342", "w500", "w780", or "original"
-        String poster_path = Movie.baseUrl + size + movie.poster_path;
+
+        String poster_path = MovieConstants.MOVIE_DB_BASE_IMAGE_URI + MovieConstants.POSTER_WIDTH_500 + movie.poster_path;
         ImageView imageView = (ImageView) convertView.findViewById(R.id.movie_image);
         Picasso.with(getContext()).load(poster_path).into((ImageView) imageView);
 
