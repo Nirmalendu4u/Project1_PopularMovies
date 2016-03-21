@@ -17,12 +17,12 @@ public class Movie implements Parcelable {
 
     /**
      *
-     * @param id
-     * @param vote_average
-     * @param original_title
-     * @param poster_path
-     * @param overview
-     * @param release_date
+     * @param id movie id
+     * @param vote_average movie rating
+     * @param original_title movie title
+     * @param poster_path movie poster path
+     * @param overview movie description
+     * @param release_date movie release date
      */
     public Movie(int id, double vote_average, String original_title, String poster_path, String overview, String release_date) {
         this.id = id;

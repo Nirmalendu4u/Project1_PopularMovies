@@ -1,7 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,28 +17,11 @@ import java.util.List;
  */
 public class MovieAdapter extends ArrayAdapter<Movie> {
 
-/*    public MovieAdapter(FragmentActivity context, int layout, int view, ArrayList<Movie> movies) {
-        super(context, layout, view, movies);
-    }*/
 
-    /**
-     *
-     * @param context
-     * @param movies
-     */
     public MovieAdapter(Activity context, List<Movie> movies) {
         super(context, 0, movies);
     }
 
-    
-
-    /**
-     *
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

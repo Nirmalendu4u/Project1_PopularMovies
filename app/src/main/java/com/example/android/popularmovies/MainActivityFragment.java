@@ -1,7 +1,10 @@
 package com.example.android.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,11 +48,6 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Check whether we're recreating a previously destroyed instance
-        if (savedInstanceState != null) {
-            movies = (Movie[]) savedInstanceState.getParcelableArray(MovieConstants.SAVED_MOVIE_DATA);
-        }
     }
 
     @Override
@@ -75,19 +74,24 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(movies.length == 0) {
+        if(isNetworkAvailable()) {
             new FetchMovieTask().execute();
+        } else {
+            Toast.makeText(getActivity(), "You are not online. Please retry once you are online", Toast.LENGTH_LONG).show();
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        savedInstanceState.putParcelableArray(MovieConstants.SAVED_MOVIE_DATA, movies);
-
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
+    /**
+     * Checks the network connectivity
+     * @return the status of the network connectivity
+     */
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
 
     private class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
 
@@ -132,7 +136,7 @@ public class MainActivityFragment extends Fragment {
 
                 final String BASE_URL = MovieConstants.MOVIE_DB_BASE_URI + sort_order + "?api_key=";
                 final String API_KEY = BuildConfig.OPEN_MOVIEDB_API_KEY;
-
+                Log.e(LOG_TAG, "++++++++++=====>" + BASE_URL + API_KEY);
 
                 URL url = new URL(BASE_URL + API_KEY);
                 urlConnection = (HttpURLConnection) url.openConnection();

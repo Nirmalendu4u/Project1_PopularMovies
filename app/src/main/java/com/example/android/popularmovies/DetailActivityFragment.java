@@ -21,6 +21,13 @@ public class DetailActivityFragment extends Fragment {
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
 
     public DetailActivityFragment() {
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -28,14 +35,14 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_detail, container, false);
         Intent intent = getActivity().getIntent();
-        Movie movie = (Movie) intent.getParcelableExtra(MovieConstants.DETAIL_VIEW_PARCEL_KEY);
+        Movie movie = intent.getParcelableExtra(MovieConstants.DETAIL_VIEW_PARCEL_KEY);
 
         ImageView movieThumbnailImageView = (ImageView) view.findViewById(R.id.movie_thumbnail);
         String poster_path = MovieConstants.MOVIE_DB_BASE_IMAGE_URI + MovieConstants.POSTER_WIDTH_500 + movie.poster_path;
         Picasso.with(getActivity()).load(poster_path).into((ImageView) movieThumbnailImageView);
 
         getTextViewHelper(view, R.id.original_title).setText(movie.original_title);
-        getTextViewHelper(view, R.id.release_date).setText(movie.release_date);
+        getTextViewHelper(view, R.id.release_date).setText(movie.release_date.substring(0, 4));
         getTextViewHelper(view, R.id.vote_average).setText(Integer.toString((int) movie.vote_average) + "/10");
         getTextViewHelper(view, R.id.overview).setText(movie.overview);
 
@@ -45,9 +52,9 @@ public class DetailActivityFragment extends Fragment {
 
     /**
      * A view finder helper
-     * @param view
-     * @param id
-     * @return
+     * @param view parent view to find the element from
+     * @param id the id of the element finding for
+     * @return the specific child
      */
     private TextView getTextViewHelper(View view, int id) {
         return (TextView) view.findViewById(id);

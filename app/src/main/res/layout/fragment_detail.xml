@@ -1,3 +1,4 @@
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,36 +9,37 @@
     <TextView
         android:id="@+id/original_title"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/dp0"
         android:text="@string/hello_world"
         android:gravity="left|center"
         android:layout_weight="1"
-        android:paddingLeft="8dp"
-        android:textSize="48sp"
+        android:paddingLeft="@dimen/dp8"
+        android:textSize="@dimen/dp32"
         android:background="@color/accent_material_light"
         android:textColor="@color/background_material_light"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="8dp"
+        android:layout_height="@dimen/dp0"
+        android:padding="@dimen/dp8"
         android:layout_weight="2">
         <ImageView
             android:id="@+id/movie_thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:paddingTop="8dp"/>
+            android:padding="@dimen/dp8"
+            android:paddingTop="@dimen/dp8"/>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center">
+            android:paddingLeft="@dimen/dp32">
             <TextView
                 android:id="@+id/release_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dp24"/>
             <TextView
                 android:id="@+id/vote_average"
                 android:layout_width="wrap_content"
@@ -47,12 +49,20 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/overview"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:text="@string/hello_world"
-        android:layout_weight="1"
-        android:paddingLeft="8dp"/>
+        android:layout_height="@dimen/dp0"
+        android:id="@+id/scrollView"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/overview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/hello_world"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"/>
+    </ScrollView>
+
+
 
 </LinearLayout>
