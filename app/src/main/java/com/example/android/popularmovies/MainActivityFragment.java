@@ -102,13 +102,13 @@ public class MainActivityFragment extends Fragment {
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             //need to change it later- the hardcoded value
             Movie[] movieArray = new Movie[20];
-            Log.e(LOG_TAG, movieArray.length + "HEEEEEELLLooooo");
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
 
                 Movie movie = new Movie(
                         (int) jsonObj.get("id"),
-                        (double) jsonObj.get("vote_average"),
+                        Double.valueOf(jsonObj.get("vote_average").toString()),
                         jsonObj.get("original_title").toString(),
                         jsonObj.get("poster_path").toString(),
                         jsonObj.get("overview").toString(),
@@ -136,7 +136,8 @@ public class MainActivityFragment extends Fragment {
 
                 final String BASE_URL = MovieConstants.MOVIE_DB_BASE_URI + sort_order + "?api_key=";
                 final String API_KEY = BuildConfig.OPEN_MOVIEDB_API_KEY;
-                Log.e(LOG_TAG, "++++++++++=====>" + BASE_URL + API_KEY);
+
+                Log.v(LOG_TAG, "++++++++++=====>" + BASE_URL + API_KEY);
 
                 URL url = new URL(BASE_URL + API_KEY);
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -197,11 +198,9 @@ public class MainActivityFragment extends Fragment {
                     movieAdapter.add(movie);
                 }
             }
-
         }
-
-
     }
+
 }
 
 
